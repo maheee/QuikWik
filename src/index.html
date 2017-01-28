@@ -9,6 +9,29 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="assets/css/pure-min.css">
   <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+  <script>
+    function define(_, remoteStorageModule) {
+      remoteStorage = remoteStorageModule();
+
+      setTimeout(function () {
+        Promise.defer = function () {
+          var resolve, reject;
+          var promise = new Promise(function() {
+            resolve = arguments[0];
+            reject = arguments[1];
+          });
+          return {
+              resolve: resolve,
+            reject: reject,
+            promise: promise
+          };
+        };
+
+        remoteStorage.access.claim('wiki', 'rw');
+        remoteStorage.displayWidget();
+      }, 1000);
+    }
+  </script>
 </head>
 <body>
   <app-root>Loading...</app-root>

@@ -9,6 +9,9 @@ import { MarkdownComponent } from './markdown/markdown.component';
 
 import { PageService } from './page/page.service';
 
+import { defineModule } from './storage/module';
+
+defineModule();
 
 @NgModule({
   declarations: [
