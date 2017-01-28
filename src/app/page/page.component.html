@@ -1,0 +1,76 @@
+<div class="wrapper {{maximized ? 'maximized' : ''}}"
+    [style.left.px]="x"
+    [style.top.px]="y"
+    [style.width.px]="width"
+    [style.height.px]="height"
+    [style.z-index]="zindex"
+    (document:mouseup)="mouseUp($event)"
+    (document:mouseleave)="mouseLeave($event)"
+    (document:mousemove)="mouseMove($event)">
+
+  <div class="resizer"
+      (mousedown)="resizerMouseDown($event)">
+  </div>
+
+  <div class="header"
+      (mousedown)="headerMouseDown($event)">
+    <div class="frontTabbar pure-button-group"
+        role="group">
+      <button class="pure-button {{isSourceActive ? 'pure-button-active' : ''}}"
+          (click)="switchToSource()">
+        <i class="fa fa-code"></i>
+      </button>
+    </div>
+    <div class="title">
+      <div>{{page.getId()}}</div>
+    </div>
+    <div class="backTabbar pure-button-group" role="group">
+      <button
+          class="pure-button {{maximized ? 'pure-button-active' : ''}}"
+          (click)="toggleMaximize()">
+        <i class="fa fa-window-maximize"></i>
+      </button>
+      <button
+          class="pure-button"
+          (click)="close()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="isViewActive" class="tabView">
+    <markdown [rawText]="page.getContent()"></markdown>
+  </div>
+
+  <div *ngIf="isSourceActive" class="tabSource pure-form">
+    <textarea
+        class="pure-input-1"
+        placeholder="Textareas work too"
+        (change)="textAreaChange($event)"
+        [value]="floatingSource">
+    </textarea>
+    <div class="buttons pure-g">
+      <div class="pure-u-1-3">
+        <button
+            type="submit"
+            class="pure-button pure-input-1 pure-button-secondary"
+            (click)="revert()">
+          <i class="fa fa-undo"></i>
+          Revert
+        </button>
+      </div>
+      <div class="pure-u-1-3">
+      </div>
+      <div class="pure-u-1-3">
+        <button
+            type="submit"
+            class="pure-button pure-input-1 pure-button-primary"
+            (click)="save()">
+          <i class="fa fa-hdd-o"></i>
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

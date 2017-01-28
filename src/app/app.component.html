@@ -1,0 +1,22 @@
+
+<h1 class="active" (click)="start()">Quik Wik</h1>
+<p>
+  <a href="https://help.github.com/categories/writing-on-github/" target="_blank">Syntax</a>
+  <a href="javascript:" (click)="importExport()">Import/Export</a>
+</p>
+<p>© mahe, 2017</p>
+
+<textarea
+    *ngIf="showDataField"
+    class="datafield"
+    (change)="dataChange($event)"
+    [value]="data"></textarea>
+<button
+    *ngIf="showDataField"
+    class="importbutton"
+    (click)="import()">
+  Import
+</button>
+
+<app-page *ngFor="let page of pages" [page]="page">
+</app-page>
