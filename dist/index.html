@@ -9,8 +9,18 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="assets/css/pure-min.css">
   <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+  <script>
+    function define(_, remoteStorageModule) {
+      /*
+       * Fix to be able to use amd version of RemoteStorage
+       */
+      remoteStorage = remoteStorageModule();
+    }
+  </script>
 <link href="styles.27ec8968c211a80191ea.bundle.css" rel="stylesheet"/></head>
 <body>
-  <app-root>Loading...</app-root>
-<script type="text/javascript" src="inline.56a0e9436dac2bb5cc9d.bundle.js"></script><script type="text/javascript" src="vendor.c5a939b8e09a4eb68972.bundle.js"></script><script type="text/javascript" src="main.bca6e54b03b44ae1c03b.bundle.js"></script></body>
+  <app-root>
+    <h1 style="margin-left: 20px; color: lightgray;">Quik Wik</h1>
+  </app-root>
+<script type="text/javascript" src="inline.857c1ae4a5b20103556a.bundle.js"></script><script type="text/javascript" src="scripts.2319df54f07185d42297.bundle.js"></script><script type="text/javascript" src="vendor.9a2100bb629eb3c4b457.bundle.js"></script><script type="text/javascript" src="main.253df91bdbac60c3bde1.bundle.js"></script></body>
 </html>
