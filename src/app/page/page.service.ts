@@ -1,35 +1,12 @@
 import { NgZone, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
+import { StorageService, WikiPage } from '../storage/storage.service';
+export { WikiPage } from '../storage/storage.service';
+
 
 declare var window:any;
 
-
-export class Page {
-
-  constructor(
-      private id:string,
-      private content:string,
-      private x:number,
-      private y:number,
-      private width:number,
-      private height:number) {
-  }
-
-  public getId() { return this.id; }
-
-  public getContent() { return this.content; }
-  public getX() { return this.x; }
-  public getY() { return this.y; }
-  public getWidth() { return this.width; }
-  public getHeight() { return this.height; }
-
-  public setContent(content:string) { this.content = content; }
-  public setX(x:number) { this.x = x; }
-  public setY(y:number) { this.y = y; }
-  public setWidth(width:number) { this.width = width; }
-  public setHeight(height:number) { this.height = height; }
-}
 
 @Injectable()
 export class PageService {
@@ -40,13 +17,14 @@ export class PageService {
   private readonly DEFAULT_WIDTH:number = 300;
   private readonly DEFAULT_HEIGHT:number = 300;
 
-  private pages:BehaviorSubject<Page[]> = new BehaviorSubject<Page[]>([]);
-
-  private lcPrefix:string = 'qw_';
+  private pages:BehaviorSubject<WikiPage[]> = new BehaviorSubject<WikiPage[]>([]);
 
   private lastZIndex = 1;
 
-  constructor(private zone:NgZone) {
+  constructor(
+      private storageService:StorageService,
+      private zone:NgZone) {
+
     let that = this;
 
     window.openPage = function (id) {
@@ -64,23 +42,24 @@ export class PageService {
     });
   }
 
-  openPage(id:string):Page {
-    this.closePage(id);
+  openPage(title:string):Promise<WikiPage> {
+    this.closePage(title);
 
-    let page = this.loadPage(id);
-    this.sanitizeCoordinates(page);
+    return this.loadPage(title).then(page => {
+      this.sanitizeCoordinates(page);
 
-    let pagesList = this.pages.getValue();
-    pagesList.push(page);
-    this.pages.next(pagesList);
+      let pagesList = this.pages.getValue();
+      pagesList.push(page);
+      this.pages.next(pagesList);
 
-    return page;
+      return page;
+    });
   }
 
-  closePage(id:string) {
+  closePage(title:string) {
     let pagesList = this.pages.getValue();
     for (let i = 0; i < pagesList.length; ++i) {
-      if (pagesList[i].getId() == id) {
+      if (pagesList[i].title == title) {
         pagesList.splice(i, 1);
         break;
       }
@@ -88,92 +67,59 @@ export class PageService {
     this.pages.next(pagesList);
   }
 
-  savePage(page:Page) {
-    let id = this.lcPrefix + page.getId();
-    if (page.getContent() && page.getContent().length > 0) {
-      window.localStorage.setItem(id, JSON.stringify({
-        id: page.getId(),
-        content: page.getContent(),
-        x: page.getX(),
-        y: page.getY(),
-        width: page.getWidth(),
-        height: page.getHeight()
-      }));
-    } else {
-      window.localStorage.removeItem(id);
-    }
-  }
+  savePage(page:WikiPage):Promise<WikiPage> {
+    let id = "page__" + page.title.replace(" ", "_");
 
-  import(data:string) {
-    try {
-      let parsed:any = JSON.parse(data);
-      for (let i in parsed) {
-        data = parsed[i];
-        if (data && data.length && data.length > 0) {
-          window.localStorage.setItem('' + i, data);
-        }
-      }
-    } catch (e) {
-      console.error("Importing Data failed!");
-      console.error(e);
-    }
-  }
-
-  export() {
-    return JSON.stringify(window.localStorage);
+    return this.storageService.save(id, page);
   }
 
   getNextZIndex() {
     return ++this.lastZIndex;
   }
 
-  private loadPage(id:string) {
-    let p = window.localStorage.getItem(this.lcPrefix + id);
-    if (p) {
-      p = JSON.parse(p);
-    }
-    if (p && p.id) {
-      return new Page(
-          p.id,
-          p.content || this.DEFAULT_CONTENT,
-          p.x || this.DEFAULT_X,
-          p.y || this.DEFAULT_Y,
-          p.width || this.DEFAULT_WIDTH,
-          p.height || this.DEFAULT_HEIGHT);
-    } else {
-      return new Page(
-          id,
-          this.DEFAULT_CONTENT,
-          this.DEFAULT_X,
-          this.DEFAULT_Y,
-          this.DEFAULT_WIDTH,
-          this.DEFAULT_HEIGHT);
-    }
+  private loadPage(title:string):Promise<WikiPage> {
+    let id = "page__" + title.replace(" ", "_");
+
+    return new Promise<WikiPage>((resolve, reject) => {
+      this.storageService.load(id).then(page => {
+        if (page) {
+          resolve(page);
+        } else {
+          resolve(new WikiPage(
+                  title,
+                  this.DEFAULT_CONTENT,
+                  this.DEFAULT_X,
+                  this.DEFAULT_Y,
+                  this.DEFAULT_WIDTH,
+                  this.DEFAULT_HEIGHT));
+        }
+      });
+    });
   }
 
-  private sanitizeCoordinates(page:Page) {
+  private sanitizeCoordinates(page:WikiPage) {
     let iw = window.innerWidth;
     let ih = window.innerHeight;
     let ww = iw - this.DEFAULT_WIDTH;
     let wh = ih - this.DEFAULT_HEIGHT;
 
-    if (page.getX() < 0) {
-      page.setX(0);
+    if (page.x < 0) {
+      page.x = 0;
     }
-    if (page.getY() < 0) {
-      page.setY(0);
+    if (page.y < 0) {
+      page.y = 0;
     }
-    if (page.getX() > ww) {
-      page.setX(ww);
+    if (page.x > ww) {
+      page.x = ww;
     }
-    if (page.getY() > wh) {
-      page.setY(wh);
+    if (page.y > wh) {
+      page.y = wh;
     }
-    if (page.getX() + page.getWidth() > iw) {
-      page.setWidth(iw - page.getX());
+    if (page.x + page.width > iw) {
+      page.width = iw - page.x;
     }
-    if (page.getY() + page.getHeight() > ih) {
-      page.setHeight(ih - page.getY());
+    if (page.y + page.height > ih) {
+      page.height = ih - page.y;
     }
   }
 

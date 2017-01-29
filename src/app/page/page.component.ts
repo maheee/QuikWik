@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Page, PageService } from './page.service';
+import { WikiPage, PageService } from './page.service';
 
 
 declare var window:any;
@@ -17,18 +17,18 @@ export class PageComponent implements OnInit {
   private isSourceActive:boolean = false;
 
   @Input()
-  private page:Page;
+  private page:WikiPage;
 
   private floatingSource:string = '';
 
   constructor(private pageService:PageService) { }
 
   ngOnInit() {
-    this.floatingSource = this.page.getContent();
-    this.x = this.page.getX();
-    this.y = this.page.getY();
-    this.width = this.page.getWidth();
-    this.height = this.page.getHeight();
+    this.floatingSource = this.page.content;
+    this.x = this.page.x;
+    this.y = this.page.y;
+    this.width = this.page.width;
+    this.height = this.page.height;
     this.zindex = this.pageService.getNextZIndex();
   }
 
@@ -47,30 +47,30 @@ export class PageComponent implements OnInit {
   }
 
   revert() {
-    this.floatingSource = this.page.getContent();
+    this.floatingSource = this.page.content;
 
     this.switchToView();
   }
 
   save() {
-    this.page.setContent(this.floatingSource);
-    this.page.setX(this.x);
-    this.page.setY(this.y);
-    this.page.setWidth(this.width);
-    this.page.setHeight(this.height);
+    this.page.content = this.floatingSource;
+    this.page.x = (this.maximized ? this.oldX : this.x);
+    this.page.y = (this.maximized ? this.oldY : this.y);
+    this.page.width = this.width;
+    this.page.height = this.height;
 
     this.pageService.savePage(this.page);
     this.switchToView();
   }
 
   close() {
-    this.page.setX(this.x);
-    this.page.setY(this.y);
-    this.page.setWidth(this.width);
-    this.page.setHeight(this.height);
+    this.page.x = (this.maximized ? this.oldX : this.x);
+    this.page.y = (this.maximized ? this.oldY : this.y);
+    this.page.width = this.width;
+    this.page.height = this.height;
     this.pageService.savePage(this.page);
 
-    this.pageService.closePage(this.page.getId());
+    this.pageService.closePage(this.page.title);
   }
 
   /*

@@ -7,11 +7,9 @@ import { AppComponent } from './app.component';
 import { PageComponent } from './page/page.component';
 import { MarkdownComponent } from './markdown/markdown.component';
 
+import { StorageService } from './storage/storage.service';
 import { PageService } from './page/page.service';
 
-import { defineModule } from './storage/module';
-
-defineModule();
 
 @NgModule({
   declarations: [
@@ -25,6 +23,7 @@ defineModule();
     HttpModule
   ],
   providers: [
+    StorageService,
     PageService
   ],
   bootstrap: [AppComponent]

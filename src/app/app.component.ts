@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Page, PageService } from './page/page.service';
+import { WikiPage, PageService } from './page/page.service';
+
+import { StorageService } from './storage/storage.service';
 
 
 @Component({
@@ -9,9 +11,11 @@ import { Page, PageService } from './page/page.service';
 })
 export class AppComponent implements OnInit {
 
-  constructor(private pageService:PageService) {}
+  constructor(
+      private storageService:StorageService,
+      private pageService:PageService) {}
 
-  pages:Page[];
+  pages:WikiPage[];
   data:string;
   showDataField:boolean = false;
 
@@ -19,25 +23,12 @@ export class AppComponent implements OnInit {
     this.pageService.getPages().subscribe((pages) => {
       this.pages = pages;
     });
+    this.storageService.displayWidget();
     this.start();
   }
 
   start() {
     this.pageService.openPage('Start');
-  }
-
-  importExport() {
-    if (this.showDataField) {
-      this.showDataField = false;
-    } else {
-      this.data = this.pageService.export();
-      this.showDataField = true;
-    }
-  }
-
-  import() {
-    this.pageService.import(this.data);
-    this.showDataField = false;
   }
 
   dataChange(event) {

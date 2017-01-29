@@ -22,7 +22,7 @@
       </button>
     </div>
     <div class="title">
-      <div>{{page.getId()}}</div>
+      <div>{{page.title}}</div>
     </div>
     <div class="backTabbar pure-button-group" role="group">
       <button
@@ -39,7 +39,7 @@
   </div>
 
   <div *ngIf="isViewActive" class="tabView">
-    <markdown [rawText]="page.getContent()"></markdown>
+    <markdown [rawText]="page.content"></markdown>
   </div>
 
   <div *ngIf="isSourceActive" class="tabSource pure-form">
