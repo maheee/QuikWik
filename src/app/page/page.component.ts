@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { WikiPage, PageService } from './page.service';
+import { MobileService } from '../util/mobile.service';
 
 
 declare var window:any;
@@ -21,7 +22,12 @@ export class PageComponent implements OnInit {
 
   private floatingSource:string = '';
 
-  constructor(private pageService:PageService) { }
+  private isMobile:boolean;
+
+  constructor(
+      private mobileService:MobileService,
+      private pageService:PageService) {
+  }
 
   ngOnInit() {
     this.floatingSource = this.page.content;
@@ -30,6 +36,21 @@ export class PageComponent implements OnInit {
     this.width = this.page.width;
     this.height = this.page.height;
     this.zindex = this.pageService.getNextZIndex();
+
+    this.mobileService.isMobile().subscribe(isMobile => {
+      this.isMobile = isMobile;
+      if (isMobile) {
+        this.maximize();
+      }
+    });
+  }
+
+  toggleSource() {
+    if (this.isViewActive) {
+      this.switchToSource();
+    } else {
+      this.revert();
+    }
   }
 
   switchToView() {
@@ -145,16 +166,31 @@ export class PageComponent implements OnInit {
   }
 
   toggleMaximize() {
-    this.maximized = !this.maximized;
     if (this.maximized) {
-      this.oldX = this.x;
-      this.oldY = this.y;
-      this.x = 0;
-      this.y = 0;
+      this.unmaximize();
     } else {
-      this.x = this.oldX;
-      this.y = this.oldY;
+      this.maximize();
     }
+  }
+
+  maximize() {
+    if (this.maximized) {
+      return;
+    }
+    this.maximized = true;
+    this.oldX = this.x;
+    this.oldY = this.y;
+    this.x = 0;
+    this.y = 0;
+  }
+
+  unmaximize() {
+    if (!this.maximized) {
+      return;
+    }
+    this.maximized = false;
+    this.x = this.oldX;
+    this.y = this.oldY;
   }
 
   clearSelection() {

@@ -8,7 +8,7 @@
     (document:mouseleave)="mouseLeave($event)"
     (document:mousemove)="mouseMove($event)">
 
-  <div class="resizer"
+  <div *ngIf="!maximized" class="resizer"
       (mousedown)="resizerMouseDown($event)">
   </div>
 
@@ -17,7 +17,7 @@
     <div class="frontTabbar pure-button-group"
         role="group">
       <button class="pure-button {{isSourceActive ? 'pure-button-active' : ''}}"
-          (click)="switchToSource()">
+          (click)="toggleSource()">
         <i class="fa fa-code"></i>
       </button>
     </div>
@@ -26,6 +26,7 @@
     </div>
     <div class="backTabbar pure-button-group" role="group">
       <button
+          *ngIf="!isMobile"
           class="pure-button {{maximized ? 'pure-button-active' : ''}}"
           (click)="toggleMaximize()">
         <i class="fa fa-window-maximize"></i>

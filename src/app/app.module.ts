@@ -9,6 +9,7 @@ import { MarkdownComponent } from './markdown/markdown.component';
 
 import { StorageService } from './storage/storage.service';
 import { PageService } from './page/page.service';
+import { MobileService } from './util/mobile.service';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { PageService } from './page/page.service';
   ],
   providers: [
     StorageService,
-    PageService
+    PageService,
+    MobileService
   ],
   bootstrap: [AppComponent]
 })

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { WikiPage, PageService } from './page/page.service';
 
 import { StorageService } from './storage/storage.service';
+import { MobileService } from './util/mobile.service';
 
 
 @Component({
@@ -13,16 +14,15 @@ export class AppComponent implements OnInit {
 
   constructor(
       private storageService:StorageService,
-      private pageService:PageService) {}
+      private pageService:PageService,
+      private mobileService:MobileService) {}
 
   pages:WikiPage[];
   data:string;
   showDataField:boolean = false;
 
   ngOnInit() {
-    this.pageService.getPages().subscribe((pages) => {
-      this.pages = pages;
-    });
+    this.pageService.getPages();
     this.storageService.displayWidget();
     this.start();
   }
@@ -33,6 +33,14 @@ export class AppComponent implements OnInit {
 
   dataChange(event) {
     this.data = event.target.value;
+  }
+
+  manuallySetMobile() {
+    this.mobileService.manuallySetMobile();
+  }
+
+  manuallySetDesktop() {
+    this.mobileService.manuallySetDesktop();
   }
 
 }

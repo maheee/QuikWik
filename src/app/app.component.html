@@ -1,9 +1,11 @@
 
 <h1 class="active" (click)="start()">Quik Wik</h1>
 <p>
+  <span class="active" *ngIf=" (mobileService.isMobile() | async)" (click)="manuallySetDesktop()">Switch to Desktop Mode, </span>
+  <span class="active" *ngIf="!(mobileService.isMobile() | async)" (click)="manuallySetMobile()">Switch to Mobile Mode, </span>
   <a href="https://help.github.com/categories/writing-on-github/" target="_blank">Syntax</a>
 </p>
 <p>© mahe, 2017</p>
 
-<app-page *ngFor="let page of pages" [page]="page">
+<app-page *ngFor="let page of (pageService.getPages() | async)" [page]="page">
 </app-page>

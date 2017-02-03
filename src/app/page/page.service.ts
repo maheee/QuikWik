@@ -4,6 +4,8 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { StorageService, WikiPage } from '../storage/storage.service';
 export { WikiPage } from '../storage/storage.service';
 
+import { MobileService } from '../util/mobile.service';
+
 
 declare var window:any;
 
@@ -19,9 +21,12 @@ export class PageService {
 
   private pages:BehaviorSubject<WikiPage[]> = new BehaviorSubject<WikiPage[]>([]);
 
-  private lastZIndex = 1;
+  private lastZIndex:number = 1;
+
+  private isMobile:boolean;
 
   constructor(
+      mobileService:MobileService,
       private storageService:StorageService,
       private zone:NgZone) {
 
@@ -30,6 +35,10 @@ export class PageService {
     window.openPage = function (id) {
       that.openPageFromOutside(id);
     }
+
+    mobileService.isMobile().subscribe(isMobile => {
+      this.isMobile = isMobile;
+    })
   }
 
   getPages() {
@@ -43,6 +52,11 @@ export class PageService {
   }
 
   openPage(title:string):Promise<WikiPage> {
+    /*if (this.isMobile) {
+      this.closeAllPages();
+    } else {
+      this.closePage(title);
+    }*/
     this.closePage(title);
 
     return this.loadPage(title).then(page => {
@@ -65,6 +79,10 @@ export class PageService {
       }
     }
     this.pages.next(pagesList);
+  }
+
+  closeAllPages() {
+    this.pages.next([]);
   }
 
   savePage(page:WikiPage):Promise<WikiPage> {
