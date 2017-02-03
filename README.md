@@ -44,6 +44,17 @@ Run `ng serve` for a dev server. Navigate to [http://localhost:4200/](http://loc
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
 
+### Deployment
+
+Create a full build with `ng build --prod`, check in everything including the `dist/` directory. If everything is set up correctly already, just run `git deploy` and watch progress on [5apps.com](https://5apps.com).
+
+#### Setup Deployment
+
+```
+git remote add 5apps git@5apps.com:REPOSITORY-NAME.git
+git config alias.deploy "subtree push --prefix dist 5apps master"
+```
+
 ### Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
