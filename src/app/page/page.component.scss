@@ -1,6 +1,20 @@
 
-$buttonHeight: 26px;
+$buttonHeight: 22px;
 
+$resizerColor: #66b0ff;
+
+$buttonSourceColor: #E6E6E6;
+
+$buttonMaximizeColor: #E6E6E6;
+$buttonCloseColor: #ff9d97;
+
+$buttonRevertColor: #E6E6E6;
+$buttonSaveColor: #66b0ff;
+
+
+/*
+ * Functional
+ */
 
 .wrapper.maximized {
   width: 100% !important;
@@ -10,13 +24,8 @@ $buttonHeight: 26px;
 
 .wrapper {
   position: absolute;
-
   display: flex;
   flex-direction: column;
-
-  box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.75);
-  border-radius: 5px;
-  background-color: white;
 
   .resizer {
     position: absolute;
@@ -24,31 +33,22 @@ $buttonHeight: 26px;
     bottom: 0px;
     width: 20px;
     height: 20px;
-
-    background: linear-gradient(135deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 50%,rgba(0,0,0,1) 100%);
-
-    cursor: se-resize;
   }
 
   .header {
     flex-grow: 0;
     flex-basis: $buttonHeight;
-
     display: flex;
     flex-direction: row;
 
-    border-bottom: 1px solid lightgray;
-    cursor: move;
-
     .frontTabbar {
       flex-grow: 0;
-      flex-basis: 45px;
+      flex-basis: 35px;
     }
 
     .backTabbar {
       flex-grow: 0;
       flex-basis: 80px;
-
       text-align: right;
     }
 
@@ -57,15 +57,9 @@ $buttonHeight: 26px;
 
       div {
         position: relative;
-        top: 4px;
-        font-weight: bold;
+        top: 2px;
       }
     }
-
-    .pure-button {
-      font-size: 75%;
-    }
-
   }
 
   .tabView, .tabSource {
@@ -76,8 +70,6 @@ $buttonHeight: 26px;
 
   .tabView {
     overflow-y: auto;
-    padding-left: 5px;
-    padding-right: 5px;
   }
 
   .tabSource {
@@ -86,9 +78,72 @@ $buttonHeight: 26px;
 
     textarea {
       flex-grow: 1;
-
-      font-size: 12px;
       resize: none;
+    }
+
+    .buttons {
+      flex-grow: 0;
+      flex-basis: $buttonHeight;
+      width: 100%;
+    }
+  }
+}
+
+
+/*
+ * Design
+ */
+
+.wrapper {
+  box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.75);
+  border-radius: 5px;
+  background-color: white;
+
+  .resizer {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 0 10px 10px;
+    border-color: transparent transparent $resizerColor transparent;
+    cursor: se-resize;
+  }
+
+  .header {
+    border-bottom: 1px solid lightgray;
+    cursor: move;
+
+    .backTabbar {
+      text-align: right;
+    }
+
+    .title {
+      div {
+        font-weight: bold;
+      }
+    }
+
+    .pure-button {
+      font-size: 60%;
+    }
+    .pure-button.source {
+      background-color: $buttonSourceColor;
+    }
+    .pure-button.maximize {
+      background-color: $buttonMaximizeColor;
+    }
+    .pure-button.close {
+      background-color: $buttonCloseColor;
+    }
+  }
+
+  .tabView {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  .tabSource {
+    textarea {
+      font-size: 12px;
       padding-top: 0px;
       padding-bottom: 0px;
       padding-left: 5px;
@@ -96,13 +151,15 @@ $buttonHeight: 26px;
     }
 
     .buttons {
-      flex-grow: 0;
-      flex-basis: $buttonHeight;
-
-      width: 100%;
-
       .pure-button {
         font-size: 75%;
+        font-weight: bold;
+      }
+      .pure-button.revert {
+        background-color: $buttonRevertColor;
+      }
+      .pure-button.save {
+        background-color: $buttonSaveColor;
       }
     }
   }

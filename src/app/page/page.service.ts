@@ -86,7 +86,7 @@ export class PageService {
   }
 
   savePage(page:WikiPage):Promise<WikiPage> {
-    let id = "page__" + page.title.replace(" ", "_");
+    let id = this.createId(page.title);
 
     return this.storageService.save(id, page);
   }
@@ -96,7 +96,7 @@ export class PageService {
   }
 
   private loadPage(title:string):Promise<WikiPage> {
-    let id = "page__" + title.replace(" ", "_");
+    let id = this.createId(title);
 
     return new Promise<WikiPage>((resolve, reject) => {
       this.storageService.load(id).then(page => {
@@ -113,6 +113,10 @@ export class PageService {
         }
       });
     });
+  }
+
+  private createId(title:string) {
+    return "page__" + title.replace(" ", "_");
   }
 
   private sanitizeCoordinates(page:WikiPage) {

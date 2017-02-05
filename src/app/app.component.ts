@@ -15,7 +15,8 @@ export class AppComponent implements OnInit {
   constructor(
       private storageService:StorageService,
       private pageService:PageService,
-      private mobileService:MobileService) {}
+      private mobileService:MobileService) {
+  }
 
   pages:WikiPage[];
   data:string;

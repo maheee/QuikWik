@@ -8,15 +8,17 @@
     (document:mouseleave)="mouseLeave($event)"
     (document:mousemove)="mouseMove($event)">
 
-  <div *ngIf="!maximized" class="resizer"
+  <!-- Resizer -->
+  <div *ngIf="!maximized && isViewActive" class="resizer"
       (mousedown)="resizerMouseDown($event)">
   </div>
 
+  <!-- Header -->
   <div class="header"
       (mousedown)="headerMouseDown($event)">
     <div class="frontTabbar pure-button-group"
         role="group">
-      <button class="pure-button {{isSourceActive ? 'pure-button-active' : ''}}"
+      <button class="pure-button source {{isSourceActive ? 'pure-button-active' : ''}}"
           (click)="toggleSource()">
         <i class="fa fa-code"></i>
       </button>
@@ -27,22 +29,24 @@
     <div class="backTabbar pure-button-group" role="group">
       <button
           *ngIf="!isMobile"
-          class="pure-button {{maximized ? 'pure-button-active' : ''}}"
+          class="pure-button maximize {{maximized ? 'pure-button-active' : ''}}"
           (click)="toggleMaximize()">
         <i class="fa fa-window-maximize"></i>
       </button>
       <button
-          class="pure-button"
+          class="pure-button close"
           (click)="close()">
         <i class="fa fa-times"></i>
       </button>
     </div>
   </div>
 
+  <!-- Content View -->
   <div *ngIf="isViewActive" class="tabView">
     <markdown [rawText]="page.content"></markdown>
   </div>
 
+  <!-- Source View -->
   <div *ngIf="isSourceActive" class="tabSource pure-form">
     <textarea
         class="pure-input-1"
@@ -54,7 +58,7 @@
       <div class="pure-u-1-3">
         <button
             type="submit"
-            class="pure-button pure-input-1 pure-button-secondary"
+            class="pure-button revert pure-input-1"
             (click)="revert()">
           <i class="fa fa-undo"></i>
           Revert
@@ -65,7 +69,7 @@
       <div class="pure-u-1-3">
         <button
             type="submit"
-            class="pure-button pure-input-1 pure-button-primary"
+            class="pure-button save pure-input-1"
             (click)="save()">
           <i class="fa fa-hdd-o"></i>
           Save

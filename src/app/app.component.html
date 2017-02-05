@@ -1,11 +1,19 @@
 
-<h1 class="active" (click)="start()">Quik Wik</h1>
+<h1 class="active">
+  <span (click)="start()">Quik Wik</span>&nbsp;
+  <span class="fa fa-tablet" *ngIf=" (mobileService.isMobile() | async)" (click)="manuallySetDesktop()"></span>
+  <span class="fa fa-laptop" *ngIf="!(mobileService.isMobile() | async)" (click)="manuallySetMobile()"></span>
+</h1>
+
 <p>
-  <span class="active" *ngIf=" (mobileService.isMobile() | async)" (click)="manuallySetDesktop()">Switch to Desktop Mode, </span>
-  <span class="active" *ngIf="!(mobileService.isMobile() | async)" (click)="manuallySetMobile()">Switch to Mobile Mode, </span>
-  <a href="https://help.github.com/categories/writing-on-github/" target="_blank">Syntax</a>
+  <a href="https://help.github.com/articles/basic-writing-and-formatting-syntax/" target="_blank">
+    <span class="fa fa-code"></span>
+  </a>,
+  <a href="https://github.com/maheee/QuikWik" target="_blank">
+    <span class="fa fa-copyright"></span>
+    mahe, 2017
+  </a>
 </p>
-<p>© mahe, 2017</p>
 
 <app-page *ngFor="let page of (pageService.getPages() | async)" [page]="page">
 </app-page>

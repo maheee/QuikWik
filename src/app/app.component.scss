@@ -1,6 +1,9 @@
 
+$textColor: #9CD5E5;
+
+
 h1, p, a, a:hover, a:visited, a:active {
-  color: lightgray;
+  color: $textColor;
   text-decoration: none;
 }
 
@@ -10,22 +13,4 @@ h1, p {
 
 .active {
   cursor: pointer;
-}
-
-.datafield, .importbutton {
-  margin-left: 20px;
-  margin-right: 20px;
-  width: calc(100% - 40px);
-  border: 0px;
-}
-.datafield {
-  background-color: lightgray;
-  color: darkgray;
-  height: 200px;
-  resize: none;
-}
-
-.importbutton {
-  background-color: darkgray;
-  color: lightgray;
 }
