@@ -38,11 +38,15 @@ export class PageService {
 
     mobileService.isMobile().subscribe(isMobile => {
       this.isMobile = isMobile;
-    })
+    });
   }
 
   getPages() {
     return this.pages.asObservable();
+  }
+
+  getChangeObservable() {
+    return this.storageService.getChangeObservable();
   }
 
   openPageFromOutside(id:string) {

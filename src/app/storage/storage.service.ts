@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Injectable, NgZone } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs/Observable';
 
 import { init } from './init';
 import { defineModule } from './module';
@@ -14,10 +15,17 @@ declare var remoteStorage:any;
 @Injectable()
 export class StorageService {
 
-  public constructor() {
+  private changeSubject:Subject<any> = new Subject<any>();
+
+  public constructor(zone:NgZone) {
     init();
     defineModule();
     remoteStorage.access.claim('wiki', 'rw');
+    remoteStorage.wiki.privateArea("").addEventListener('change', event => {
+      zone.run(() => {
+        this.changeSubject.next(event);
+      });
+    });
   }
 
   public displayWidget() {
@@ -36,6 +44,10 @@ export class StorageService {
       .wiki
       .privateArea("")
       .set(id, wikiPage);
+  }
+
+  public getChangeObservable():Observable<any> {
+    return this.changeSubject.asObservable();
   }
 
 }

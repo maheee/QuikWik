@@ -43,6 +43,12 @@ export class PageComponent implements OnInit {
         this.maximize();
       }
     });
+
+    this.pageService.getChangeObservable().subscribe(event => {
+      if (event.newValue && event.newValue.title == this.page.title) {
+        this.page = event.newValue;
+      }
+    });
   }
 
   toggleSource() {

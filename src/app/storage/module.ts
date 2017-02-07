@@ -24,9 +24,8 @@ export function defineModule() {
 
     function setupArea(client, path:string) {
       return client
-        .scope(path + '/')
-        .extend(areaMethods)
-        .cache('', 'ALL');
+        .scope(path)
+        .extend(areaMethods);
     }
 
     var wikiModule = {
