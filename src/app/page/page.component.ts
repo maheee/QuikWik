@@ -47,6 +47,10 @@ export class PageComponent implements OnInit {
     this.pageService.getChangeObservable().subscribe(event => {
       if (event.newValue && event.newValue.title == this.page.title) {
         this.page = event.newValue;
+        this.x = this.page.x;
+        this.y = this.page.y;
+        this.width = this.page.width;
+        this.height = this.page.height;
       }
     });
   }
@@ -91,11 +95,11 @@ export class PageComponent implements OnInit {
   }
 
   close() {
-    this.page.x = (this.maximized ? this.oldX : this.x);
-    this.page.y = (this.maximized ? this.oldY : this.y);
-    this.page.width = this.width;
-    this.page.height = this.height;
-    this.pageService.savePage(this.page);
+    //this.page.x = (this.maximized ? this.oldX : this.x);
+    //this.page.y = (this.maximized ? this.oldY : this.y);
+    //this.page.width = this.width;
+    //this.page.height = this.height;
+    //this.pageService.savePage(this.page);
 
     this.pageService.closePage(this.page.title);
   }

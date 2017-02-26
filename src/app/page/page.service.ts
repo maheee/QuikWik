@@ -92,7 +92,10 @@ export class PageService {
   savePage(page:WikiPage):Promise<WikiPage> {
     let id = this.createId(page.title);
 
-    return this.storageService.save(id, page);
+    return this.storageService.save(id, page).catch(error => {
+      console.error("Failed to store page!");
+      console.error(error);
+    });
   }
 
   getNextZIndex() {
@@ -115,6 +118,10 @@ export class PageService {
                   this.DEFAULT_WIDTH,
                   this.DEFAULT_HEIGHT));
         }
+      }).catch(error => {
+        console.error("Failed to load page!");
+        console.error(error);
+        reject(error);
       });
     });
   }
